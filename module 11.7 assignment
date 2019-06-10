@@ -1,0 +1,45 @@
+-- question 1: most expensive listing price is 10,000. Each host has one listing. 
+SELECT 
+	MAX(price) as most_expensive_listing,
+	id
+FROM sfo_listings
+GROUP BY 2
+ORDER BY most_expensive_listing DESC;
+
+SELECT 
+	host_id,
+	id,
+	name,
+	COUNT (*) as counts
+FROM sfo_listings
+group by 1,2,3
+ORDER BY counts DESC; 
+
+-- question 2: neighbourhood named Mission seem to be most popular as it goes
+-- unavailable most of the time. 
+WITH neighborhood AS
+(SELECT
+	id,
+	neighbourhood
+FROM sfo_listings
+GROUP BY 1,2)
+SELECT 
+	neighborhood.neighbourhood,
+	COUNT(CASE WHEN available = 'f' THEN 1 END) as not_available
+FROM sfo_calendar
+JOIN neighborhood
+ON sfo_calendar.listing_id = neighborhood.id
+GROUP BY 1
+ORDER BY 2 DESC;
+
+-- question 3:
+WITH pricing AS
+(SELECT
+	MIN(price) as min_price,
+	id
+FROM sfo_listings
+GROUP BY id
+ORDER BY min_price ASC)
+
+SELECT *
+FROM pricing;
