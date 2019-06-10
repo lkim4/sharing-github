@@ -38,8 +38,14 @@ WITH pricing AS
 	MIN(price) as min_price,
 	id
 FROM sfo_listings
-GROUP BY id
+GROUP BY 2
 ORDER BY min_price ASC)
-
-SELECT *
-FROM pricing;
+SELECT
+	sfo_calendar.calender_date,
+	sfo_calendar.listing_id,
+	pricing.min_price
+FROM sfo_calendar
+JOIN pricing
+ON sfo_calendar.listing_id = pricing.id
+GROUP BY 1,2,3
+ORDER BY min_price ASC;
