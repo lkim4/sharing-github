@@ -15,7 +15,7 @@ FROM sfo_listings
 group by 1,2,3
 ORDER BY counts DESC; 
 
--- question 2: neighbourhood named Mission seem to be most popular as it goes
+-- question 2: neighbourhood named Mission seems to be most popular as it goes
 -- unavailable most of the time. 
 WITH neighborhood AS
 (SELECT
@@ -47,7 +47,7 @@ SELECT
 FROM dates
 GROUP BY 2
 ORDER BY 1 ASC;
---question 3 part 2: September is the busiest time to go to San Fran and then followed by October.  
+--question 3 part 2: September is the busiest time to go to San Fran, followed by October.  
 SELECT
 	EXTRACT(MONTH FROM sfo_calendar.calender_date) as months,
 	COUNT(*) as counts
