@@ -32,20 +32,26 @@ ON sfo_calendar.listing_id = neighborhood.id
 GROUP BY 1
 ORDER BY 2 DESC;
 
--- question 3:
-WITH pricing AS
+-- question 3: January is the cheapest time to go to San Fran with avg. price of $784.78.
+-- most expensive time would be in October with avg. price of $4687.57.
+WITH dates AS
 (SELECT
-	MIN(price) as min_price,
-	id
-FROM sfo_listings
-GROUP BY 2
-ORDER BY min_price ASC)
-SELECT
-	sfo_calendar.calender_date,
-	sfo_calendar.listing_id,
-	pricing.min_price
+	EXTRACT(MONTH FROM sfo_calendar.calender_date) as months,
+ 	REPLACE(REPLACE(price, '$',''),',','') as price
 FROM sfo_calendar
-JOIN pricing
-ON sfo_calendar.listing_id = pricing.id
-GROUP BY 1,2,3
-ORDER BY min_price ASC;
+WHERE price IS NOT NULL
+GROUP BY 1, 2)
+SELECT
+	AVG((CAST(CAST(price AS NUMERIC) AS INT))),
+	months
+FROM dates
+GROUP BY 2
+ORDER BY 1 ASC;
+--question 3 part 2: September is the busiest time to go to San Fran and then followed by October.  
+SELECT
+	EXTRACT(MONTH FROM sfo_calendar.calender_date) as months,
+	COUNT(*) as counts
+FROM sfo_calendar
+WHERE available = 'f'
+GROUP BY 1
+ORDER BY 2 DESC; 
